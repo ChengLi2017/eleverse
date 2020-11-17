@@ -25,15 +25,15 @@ public class UserController {
 
 	@Resource(name = "userService")
 	private IUserService userService;
-
-	@PostMapping("/user/register")
+//删除注册功能
+/*	@PostMapping("/user/register")
 	public ResponseVo<User> register(@Valid @RequestBody UserRegisterForm userForm) {
 		User user = new User();
 		BeanUtils.copyProperties(userForm, user);
 		user.setDataid(userService.getUUID());
 		user.setUserid(user.getDataid());
 		return userService.register(user);
-	}
+	}*/
 	@PostMapping("/user/login")
 	public ResponseVo<User> login(@Valid @RequestBody UserLoginForm userLoginForm,
                                   HttpSession session) {

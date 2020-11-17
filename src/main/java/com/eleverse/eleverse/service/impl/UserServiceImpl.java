@@ -8,6 +8,7 @@ import com.eleverse.eleverse.service.IUserService;
 import com.eleverse.eleverse.vo.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -19,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 public class UserServiceImpl implements IUserService {
 
 	@Autowired
+	@Qualifier(value = "userMapper")
 	private UserMapper userMapper;
 
 	/**
@@ -36,13 +38,6 @@ public class UserServiceImpl implements IUserService {
 			return ResponseVo.error(ResponseEnum.USERNAME_EXIST);
 		}
 
-/*		//email不能重复
-		int countByEmail = userMapper.countByEmail(user.getEmail());
-		if (countByEmail > 0) {
-			return ResponseVo.error(ResponseEnum.EMAIL_EXIST);
-		}*/
-
-		//user.setRole(RoleEnum.CUSTOMER.getCode());
 		//MD5摘要算法(Spring自带)
 		user.setPassword(DigestUtils.md5DigestAsHex(
 				user.getPassword().getBytes(StandardCharsets.UTF_8)
@@ -60,7 +55,6 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public ResponseVo<User> login(String username, String password) {
 		User user = userMapper.selectByUsername(username);
-		log.info("2---======================================================");
 		if (user == null) {
 			//用户不存在（返回：用户名或密码错误 ）
 			return ResponseVo.error(ResponseEnum.USERNAME_OR_PASSWORD_ERROR);
@@ -74,10 +68,6 @@ public class UserServiceImpl implements IUserService {
 
 		user.setPassword("");
 		return ResponseVo.success(user);
-	}
-
-	public String getUUID(){
-		return userMapper.getUUID();
 	}
 
 	private void error() {

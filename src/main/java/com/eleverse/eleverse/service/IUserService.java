@@ -16,8 +16,4 @@ public interface IUserService {
 	 */
 	ResponseVo<User> login(String username, String password);
 
-	/*
-	* 取得UUID
-	* */
-	String getUUID();
 }
