@@ -2,12 +2,10 @@ package com.eleverse.eleverse.controller;
 
 import com.eleverse.eleverse.consts.MallConst;
 import com.eleverse.eleverse.form.UserLoginForm;
-import com.eleverse.eleverse.form.UserRegisterForm;
 import com.eleverse.eleverse.pojo.User;
 import com.eleverse.eleverse.service.IUserService;
 import com.eleverse.eleverse.vo.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
