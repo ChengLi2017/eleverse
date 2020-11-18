@@ -25,8 +25,6 @@ public class UserServiceImpl implements IUserService {
 
 	/**
 	 * 注册
-	 *
-	 * @param user
 	 */
 	@Override
 	public ResponseVo<User> register(User user) {
@@ -57,7 +55,7 @@ public class UserServiceImpl implements IUserService {
 		User user = userMapper.selectByUsername(username);
 		if (user == null) {
 			//用户不存在（返回：用户名或密码错误 ）
-			return ResponseVo.error(ResponseEnum.USERNAME_OR_PASSWORD_ERROR);
+			return ResponseVo.error(ResponseEnum.USERNAME_NOTEXIST);
 		}
 
 		if (!user.getPassword().equalsIgnoreCase(

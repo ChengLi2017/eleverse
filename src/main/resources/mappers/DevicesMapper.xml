@@ -4,12 +4,13 @@
   <resultMap id="BaseResultMap" type="com.eleverse.eleverse.pojo.Devices">
     <id column="deviceUID" jdbcType="VARCHAR" property="deviceuid" />
     <result column="capacity" jdbcType="INTEGER" property="capacity" />
+    <result column="occupied" jdbcType="INTEGER" property="occupied" />
     <result column="corporation" jdbcType="VARCHAR" property="corporation" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    deviceUID, capacity, corporation, create_time, update_time
+    deviceUID, capacity, occupied, corporation, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -26,14 +27,42 @@
         where username = #{username,jdbcType=VARCHAR}
     )
   </select>
+  <select id="selectUIDfromDevices" resultType="java.lang.Integer">
+    select count(*)
+    from eleverse_devices
+    where deviceUID = #{deviceuid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectBoxByDevicesUID" resultType="java.lang.String">
+    select boxUID
+    from eleverse_boxes
+    where deviceUID = #{deviceuid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectTubesByBoxUID" resultType="java.lang.Integer">
+    select count(*)
+    from eleverse_tubes
+    where boxUID = #{boxuid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectBoxesByDevicesUID" resultType="java.util.HashMap">
+    select *
+    from eleverse_boxes
+    where deviceUID = #{deviceuid,jdbcType=VARCHAR}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from eleverse_devices
     where deviceUID = #{deviceuid,jdbcType=VARCHAR}
   </delete>
+  <delete id="deleteTubesByBoxUID" parameterType="java.lang.String">
+    delete from eleverse_tubes
+    where boxUID = #{boxuid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteBoxesByDeviceUID" parameterType="java.lang.String">
+    delete from eleverse_boxes
+    where deviceUID = #{deviceuid,jdbcType=VARCHAR}
+  </delete>
   <insert id="insert" parameterType="com.eleverse.eleverse.pojo.Devices">
-    insert into eleverse_devices (deviceUID, capacity, corporation, 
+    insert into eleverse_devices (deviceUID, capacity, occupied, corporation,
       create_time, update_time)
-    values (#{deviceuid,jdbcType=VARCHAR}, #{capacity,jdbcType=INTEGER}, #{corporation,jdbcType=VARCHAR}, 
+    values (#{deviceuid,jdbcType=VARCHAR}, #{capacity,jdbcType=INTEGER}, #{occupied,jdbcType=INTEGER},#{corporation,jdbcType=VARCHAR},
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.eleverse.eleverse.pojo.Devices">
@@ -44,6 +73,9 @@
       </if>
       <if test="capacity != null">
         capacity,
+      </if>
+      <if test="occupied != null">
+        occupied,
       </if>
       <if test="corporation != null">
         corporation,
@@ -62,6 +94,9 @@
       <if test="capacity != null">
         #{capacity,jdbcType=INTEGER},
       </if>
+      <if test="occupied != null">
+        #{occupied,jdbcType=INTEGER},
+      </if>
       <if test="corporation != null">
         #{corporation,jdbcType=VARCHAR},
       </if>
@@ -79,6 +114,9 @@
       <if test="capacity != null">
         capacity = #{capacity,jdbcType=INTEGER},
       </if>
+      <if test="capacity != null">
+        occupied = #{occupied,jdbcType=INTEGER},
+      </if>
       <if test="corporation != null">
         corporation = #{corporation,jdbcType=VARCHAR},
       </if>
@@ -94,6 +132,7 @@
   <update id="updateByPrimaryKey" parameterType="com.eleverse.eleverse.pojo.Devices">
     update eleverse_devices
     set capacity = #{capacity,jdbcType=INTEGER},
+        occupied = #{occupied,jdbcType=INTEGER},
       corporation = #{corporation,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}

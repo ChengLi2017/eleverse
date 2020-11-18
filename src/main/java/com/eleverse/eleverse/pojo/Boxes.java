@@ -5,14 +5,19 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class Devices {
+public class Boxes {
+
+    private String boxuid;
+
+    private String boxid;
+
     private String deviceuid;
+
+    private String location;
 
     private Integer capacity;
 
     private Integer occupied;
-
-    private String corporation;
 
     private Date createTime;
 

@@ -19,4 +19,17 @@ public interface DevicesMapper {
     int updateByPrimaryKey(Devices record);
 
     ArrayList<HashMap> selectDevicesByCoporationUsename(String username);
+
+    int selectUIDfromDevices(String deviceuid);
+
+    ArrayList<String> selectBoxByDevicesUID(String deviceUID);
+
+    int selectTubesByBoxUID(String tmp);
+
+    int deleteTubesByBoxUID(String tubes);
+
+    int deleteBoxesByDeviceUID(String deviceUID);
+
+    ArrayList<HashMap> selectBoxesByDevicesUID(String deviceUID);
+
 }

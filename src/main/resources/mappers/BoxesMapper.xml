@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eleverse.eleverse.dao.BoxesMapper">
+  <resultMap id="BaseResultMap" type="com.eleverse.eleverse.pojo.Boxes">
+    <id column="boxUID" jdbcType="VARCHAR" property="boxuid" />
+    <result column="boxID" jdbcType="VARCHAR" property="boxid" />
+    <result column="deviceUID" jdbcType="VARCHAR" property="deviceuid" />
+    <result column="location" jdbcType="VARCHAR" property="location" />
+    <result column="capacity" jdbcType="INTEGER" property="capacity" />
+    <result column="occupied" jdbcType="INTEGER" property="occupied" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    boxUID, deviceUID, location, capacity, occupied, create_time, update_time, boxID
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from eleverse_boxes
+    where boxUID = #{boxuid,jdbcType=VARCHAR}
+  </select>
+    <select id="selectTubesByBoxUID" resultType="com.eleverse.eleverse.pojo.Tubes">
+      select tubeUID, boxUID, tubeID, location, sampleType, sampleTemperature, personName, create_time, update_time
+      from eleverse_tubes
+      where boxUID = #{boxuid,jdbcType=VARCHAR}
+    </select>
+  <select id="selectCountByBoxUID" resultType="java.lang.Integer">
+    select count(*)
+    from eleverse_boxes
+    where boxUID = #{boxuid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectCapacity" resultType="java.lang.Integer">
+    select IFNULL(capacity,0)- IFNULL(occupied,0)
+    from eleverse_devices
+    where deviceUID = #{deviceuid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByBoxID" resultType="com.eleverse.eleverse.pojo.Boxes">
+    select
+    <include refid="Base_Column_List" />
+    from eleverse_boxes
+    where boxID = #{boxid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByBoxUID" resultType="com.eleverse.eleverse.pojo.Boxes">
+    select
+    <include refid="Base_Column_List" />
+    from eleverse_boxes
+    where boxUID = #{boxuid,jdbcType=VARCHAR}
+  </select>
+  <update id="delUpdateDevices" parameterType="java.lang.String">
+   update eleverse_devices
+    set occupied = IFNULL(occupied,0)-1
+    where deviceUID = (select deviceUID from eleverse_boxes where  boxUID = #{boxuid,jdbcType=VARCHAR} )
+  </update>
+  <update id="countUpdateDevices" parameterType="java.lang.String">
+    update eleverse_devices
+    set occupied = IFNULL(occupied,0) + 1
+    where deviceUID = #{deviceuid,jdbcType=VARCHAR}
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from eleverse_boxes
+    where boxUID = #{boxuid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteTubesByBoxUID">
+    delete from eleverse_tubes
+    where boxUID = #{boxuid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.eleverse.eleverse.pojo.Boxes">
+    insert into eleverse_boxes (boxUID,boxID, deviceUID, location,
+      capacity, occupied, create_time, update_time
+      )
+    values (#{boxuid,jdbcType=VARCHAR}, #{boxid,jdbcType=VARCHAR},#{deviceuid,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR},
+      #{capacity,jdbcType=INTEGER},#{occupied,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.eleverse.eleverse.pojo.Boxes">
+    insert into eleverse_boxes
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="boxuid != null">
+        boxUID,
+      </if>
+      <if test="boxid != null">
+        boxID,
+      </if>
+      <if test="deviceuid != null">
+        deviceUID,
+      </if>
+      <if test="location != null">
+        location,
+      </if>
+      <if test="capacity != null">
+        capacity,
+      </if>
+      <if test="occupied != null">
+        occupied,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="boxuid != null">
+        #{boxuid,jdbcType=VARCHAR},
+      </if>
+      <if test="boxid != null">
+        #{boxid,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceuid != null">
+        #{deviceuid,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null">
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="capacity != null">
+        #{capacity,jdbcType=INTEGER},
+      </if>
+      <if test="occupied != null">
+        #{occupied,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.eleverse.eleverse.pojo.Boxes">
+    update eleverse_boxes
+    <set>
+      <if test="deviceuid != null">
+        deviceUID = #{deviceuid,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null">
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="capacity != null">
+        capacity = #{capacity,jdbcType=INTEGER},
+      </if>
+      <if test="occupied != null">
+        occupied = #{occupied,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where boxUID = #{boxuid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.eleverse.eleverse.pojo.Boxes">
+    update eleverse_boxes
+    set deviceUID = #{deviceuid,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR},
+      capacity = #{capacity,jdbcType=INTEGER},
+      occupied = #{occupied,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where boxUID = #{boxuid,jdbcType=VARCHAR}
+  </update>
+</mapper>

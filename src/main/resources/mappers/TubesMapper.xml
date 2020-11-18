@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eleverse.eleverse.dao.TubesMapper">
+  <resultMap id="BaseResultMap" type="com.eleverse.eleverse.pojo.Tubes">
+    <id column="tubeUID" jdbcType="VARCHAR" property="tubeuid" />
+    <result column="boxUID" jdbcType="VARCHAR" property="boxuid" />
+    <result column="tubeID" jdbcType="VARCHAR" property="tubeid" />
+    <result column="location" jdbcType="INTEGER" property="location" />
+    <result column="sampleType" jdbcType="VARCHAR" property="sampletype" />
+    <result column="sampleTemperature" jdbcType="VARCHAR" property="sampletemperature" />
+    <result column="personName" jdbcType="VARCHAR" property="personname" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    tubeUID, boxUID, tubeID, location, sampleType, sampleTemperature, personName, create_time, 
+    update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from eleverse_tubes
+    where tubeUID = #{tubeuid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByTubeID" parameterType="java.lang.String" resultType="com.eleverse.eleverse.pojo.Tubes">
+    select
+    <include refid="Base_Column_List" />
+    from eleverse_tubes
+    where tubeID = #{tubeid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPersonName" resultType="com.eleverse.eleverse.pojo.Tubes">
+    select
+    <include refid="Base_Column_List" />
+    from eleverse_tubes
+    where personName = #{personname,jdbcType=VARCHAR}
+  </select>
+    <select id="selectCountByPrimaryKey" resultType="java.lang.Integer">
+      select count(*)
+      from eleverse_tubes
+      where tubeUID = #{tubeuid,jdbcType=VARCHAR}
+    </select>
+  <select id="selectCapacity" resultType="java.lang.Integer">
+    call getOccupiedfromboxes(#{tubeuid,jdbcType=VARCHAR});
+  </select>
+  <select id="countUpdateBoxesDelete">
+    update eleverse_boxes
+    set occupied = IFNULL(occupied,0) - 1
+    where boxUID = #{boxuid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from eleverse_tubes
+    where tubeUID = #{tubeuid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.eleverse.eleverse.pojo.Tubes">
+    insert into eleverse_tubes (tubeUID, boxUID, tubeID, 
+      location, sampleType, sampleTemperature, 
+      personName, create_time, update_time
+      )
+    values (#{tubeuid,jdbcType=VARCHAR}, #{boxuid,jdbcType=VARCHAR}, #{tubeid,jdbcType=VARCHAR}, 
+      #{location,jdbcType=INTEGER}, #{sampletype,jdbcType=VARCHAR}, #{sampletemperature,jdbcType=VARCHAR}, 
+      #{personname,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.eleverse.eleverse.pojo.Tubes">
+    insert into eleverse_tubes
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tubeuid != null">
+        tubeUID,
+      </if>
+      <if test="boxuid != null">
+        boxUID,
+      </if>
+      <if test="tubeid != null">
+        tubeID,
+      </if>
+      <if test="location != null">
+        location,
+      </if>
+      <if test="sampletype != null">
+        sampleType,
+      </if>
+      <if test="sampletemperature != null">
+        sampleTemperature,
+      </if>
+      <if test="personname != null">
+        personName,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tubeuid != null">
+        #{tubeuid,jdbcType=VARCHAR},
+      </if>
+      <if test="boxuid != null">
+        #{boxuid,jdbcType=VARCHAR},
+      </if>
+      <if test="tubeid != null">
+        #{tubeid,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null">
+        #{location,jdbcType=INTEGER},
+      </if>
+      <if test="sampletype != null">
+        #{sampletype,jdbcType=VARCHAR},
+      </if>
+      <if test="sampletemperature != null">
+        #{sampletemperature,jdbcType=VARCHAR},
+      </if>
+      <if test="personname != null">
+        #{personname,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="countUpdateBoxes" parameterType="java.lang.String">
+    update eleverse_boxes
+    set occupied = IFNULL(occupied,0) + 1
+    where boxUID = #{boxuid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.eleverse.eleverse.pojo.Tubes">
+    update eleverse_tubes
+    <set>
+      <if test="boxuid != null">
+        boxUID = #{boxuid,jdbcType=VARCHAR},
+      </if>
+      <if test="tubeid != null">
+        tubeID = #{tubeid,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null">
+        location = #{location,jdbcType=INTEGER},
+      </if>
+      <if test="sampletype != null">
+        sampleType = #{sampletype,jdbcType=VARCHAR},
+      </if>
+      <if test="sampletemperature != null">
+        sampleTemperature = #{sampletemperature,jdbcType=VARCHAR},
+      </if>
+      <if test="personname != null">
+        personName = #{personname,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where tubeUID = #{tubeuid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.eleverse.eleverse.pojo.Tubes">
+    update eleverse_tubes
+    set boxUID = #{boxuid,jdbcType=VARCHAR},
+      tubeID = #{tubeid,jdbcType=VARCHAR},
+      location = #{location,jdbcType=INTEGER},
+      sampleType = #{sampletype,jdbcType=VARCHAR},
+      sampleTemperature = #{sampletemperature,jdbcType=VARCHAR},
+      personName = #{personname,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where tubeUID = #{tubeuid,jdbcType=VARCHAR}
+  </update>
+</mapper>

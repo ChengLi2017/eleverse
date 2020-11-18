@@ -1,21 +1,23 @@
-package com.eleverse.eleverse.pojo;
+package com.eleverse.eleverse.form;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Data
-public class Devices {
+public class DevicesInsertForm {
+
+    @NotBlank
     private String deviceuid;
 
     private Integer capacity;
 
     private Integer occupied;
 
+    @NotBlank
     private String corporation;
 
     private Date createTime;
-
-    private Date updateTime;
 
 }

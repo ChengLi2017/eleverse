@@ -19,7 +19,17 @@ public enum ResponseEnum {
 
 	USERNAME_OR_PASSWORD_ERROR(5, "用户名或密码错误"),
 
-	DEVICES_CORPORATION_ERROR(6,"无法查询到用户名下的公司冷冻设备"),
+	NONE_DATA(6,"未查询到数据"),
+
+	UID_ERROR(7,"UID重复"),
+
+	UID_NOEXIST(8,"数据不存在"),
+
+	CAPACITY_ERROR(9,"容量不够用，无法添加"),
+
+	USERNAME_NOTEXIST(10, "用户不存在"),
+
+
 
 	;
 
