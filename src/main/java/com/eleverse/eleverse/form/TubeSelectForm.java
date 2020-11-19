@@ -13,6 +13,8 @@ public class TubeSelectForm {
 
     private Integer location;
 
+    private String corporation;
+
     private String sampletype;
 
     private String sampletemperature;

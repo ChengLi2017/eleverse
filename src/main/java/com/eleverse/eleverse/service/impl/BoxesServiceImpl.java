@@ -40,13 +40,21 @@ public class BoxesServiceImpl implements IBoxesService {
     @Transactional
     //insert box data
     public ResponseVo<Boxes> insertBoxes(Boxes boxes) {
-        //判断UID是否重复
-        if(boxesMapper.selectCountByBoxUID(boxes.getBoxuid()) > 0){
+        //判断同公司UID是否重复
+        if(boxesMapper.selectCountByBoxUID(boxes) > 0){
             return ResponseVo.error(ResponseEnum.UID_ERROR);
         }
+        //判断同公司ID是否重复
+        if(boxesMapper.selectCountByBoxID(boxes) > 0){
+            return ResponseVo.error(ResponseEnum.ID_ERROR);
+        }
         //判断容量是否够用
-        if(boxesMapper.selectCapacity(boxes.getDeviceuid()) < 1){
-            return ResponseVo.error(ResponseEnum.CAPACITY_ERROR);
+        Integer integer = boxesMapper.selectCapacity(boxes.getDeviceuid());
+        if(integer == null){
+            return ResponseVo.error(ResponseEnum.NONDEVICEUID);
+        }
+        if(integer != null && integer <1){
+                return ResponseVo.error(ResponseEnum.CAPACITY_ERROR);
         }
         int count = boxesMapper.insertSelective(boxes);
         if (count > 0 ){

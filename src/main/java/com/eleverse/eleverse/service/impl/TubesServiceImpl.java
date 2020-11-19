@@ -46,13 +46,19 @@ public class TubesServiceImpl implements ITubesService {
     @Transactional
     public ResponseVo<Tubes> insertSelective(Tubes tube) {
         //判断UID是否重复
-        if(tubesMapper.selectCountByPrimaryKey(tube.getTubeuid()) > 0){
+        if(tubesMapper.selectCountByTubeUID(tube) > 0){
             return ResponseVo.error(ResponseEnum.UID_ERROR);
         }
+        //判断同公司ID是否重复
+        if(tubesMapper.selectCountByTubeID(tube) > 0){
+            return ResponseVo.error(ResponseEnum.ID_ERROR);
+        }
         //判断盒子容量是否够用
-        int i = tubesMapper.selectCapacity(tube.getBoxuid());
-        log.info(i+"");
-        if(i < 1 ){
+        Integer integer = tubesMapper.selectCapacity(tube.getBoxuid());
+        if(integer == null){
+            return ResponseVo.error(ResponseEnum.NONBOXUID);
+        }
+        if(integer < 1 ){
             return ResponseVo.error(ResponseEnum.CAPACITY_ERROR);
         }
 

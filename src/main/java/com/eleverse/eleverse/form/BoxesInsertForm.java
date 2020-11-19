@@ -22,6 +22,9 @@ public class BoxesInsertForm {
     @NotBlank
     private String location;
 
+    @NotBlank
+    private String corporation;
+
     private Integer capacity;
 
     private Date createTime;

@@ -3,6 +3,7 @@ package com.eleverse.eleverse.dao;
 import com.eleverse.eleverse.pojo.Boxes;
 import com.eleverse.eleverse.pojo.Tubes;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 public interface BoxesMapper {
@@ -20,9 +21,11 @@ public interface BoxesMapper {
 
     ArrayList<Tubes> selectTubesByBoxUID(String boxuid);
 
-    int selectCountByBoxUID(String boxuid);
+    int selectCountByBoxUID(Boxes boxes);
 
-    int selectCapacity(String deviceuid);
+    int selectCountByBoxID(Boxes boxes);
+
+    Integer selectCapacity(String deviceuid);
 
     int countUpdateDevices(String deviceuid);
 

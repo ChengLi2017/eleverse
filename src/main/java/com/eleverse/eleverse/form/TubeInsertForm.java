@@ -24,6 +24,9 @@ public class TubeInsertForm {
     private String sampletemperature;
 
     @NotBlank
+    private String corporation;
+
+    @NotBlank
     private String personname;
 
     private Date createTime;

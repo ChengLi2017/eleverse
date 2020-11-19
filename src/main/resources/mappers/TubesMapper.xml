@@ -6,6 +6,7 @@
     <result column="boxUID" jdbcType="VARCHAR" property="boxuid" />
     <result column="tubeID" jdbcType="VARCHAR" property="tubeid" />
     <result column="location" jdbcType="INTEGER" property="location" />
+    <result column="corporation" jdbcType="VARCHAR" property="corporation" />
     <result column="sampleType" jdbcType="VARCHAR" property="sampletype" />
     <result column="sampleTemperature" jdbcType="VARCHAR" property="sampletemperature" />
     <result column="personName" jdbcType="VARCHAR" property="personname" />
@@ -13,7 +14,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    tubeUID, boxUID, tubeID, location, sampleType, sampleTemperature, personName, create_time, 
+    tubeUID, boxUID, tubeID, location, corporation, corporation, sampleType, sampleTemperature, personName, create_time,
     update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -33,31 +34,47 @@
     <include refid="Base_Column_List" />
     from eleverse_tubes
     where personName = #{personname,jdbcType=VARCHAR}
+    and corporation = #{corporation,jdbcType=VARCHAR}
   </select>
     <select id="selectCountByPrimaryKey" resultType="java.lang.Integer">
       select count(*)
       from eleverse_tubes
       where tubeUID = #{tubeuid,jdbcType=VARCHAR}
     </select>
+  <select id="selectCountByTubeUID" resultType="java.lang.Integer">
+      select count(*)
+      from eleverse_tubes
+      where tubeUID = #{tubeuid,jdbcType=VARCHAR}
+      and corporation = #{corporation,jdbcType=VARCHAR}
+    </select>
+  <select id="selectCountByTubeID" resultType="java.lang.Integer">
+    select count(*)
+      from eleverse_tubes
+      where tubeID = #{tubeid,jdbcType=VARCHAR}
+      and corporation = #{corporation,jdbcType=VARCHAR}
+  </select>
   <select id="selectCapacity" resultType="java.lang.Integer">
-    call getOccupiedfromboxes(#{tubeuid,jdbcType=VARCHAR});
+    select IFNULL(capacity,0)- IFNULL(occupied,0)
+     from eleverse_boxes
+     where boxUID = #{boxuid,jdbcType=VARCHAR}
   </select>
   <select id="countUpdateBoxesDelete">
     update eleverse_boxes
     set occupied = IFNULL(occupied,0) - 1
     where boxUID = #{boxuid,jdbcType=VARCHAR}
   </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from eleverse_tubes
     where tubeUID = #{tubeuid,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.eleverse.eleverse.pojo.Tubes">
     insert into eleverse_tubes (tubeUID, boxUID, tubeID, 
-      location, sampleType, sampleTemperature, 
+      location, corporation, sampleType, sampleTemperature,
       personName, create_time, update_time
       )
     values (#{tubeuid,jdbcType=VARCHAR}, #{boxuid,jdbcType=VARCHAR}, #{tubeid,jdbcType=VARCHAR}, 
-      #{location,jdbcType=INTEGER}, #{sampletype,jdbcType=VARCHAR}, #{sampletemperature,jdbcType=VARCHAR}, 
+      #{location,jdbcType=INTEGER}, #{corporation,jdbcType=VARCHAR}, #{sampletype,jdbcType=VARCHAR}, #{sampletemperature,jdbcType=VARCHAR},
       #{personname,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -75,6 +92,9 @@
       </if>
       <if test="location != null">
         location,
+      </if>
+      <if test="corporation != null">
+        corporation,
       </if>
       <if test="sampletype != null">
         sampleType,
@@ -104,6 +124,9 @@
       </if>
       <if test="location != null">
         #{location,jdbcType=INTEGER},
+      </if>
+      <if test="corporation != null">
+        #{corporation,jdbcType=VARCHAR},
       </if>
       <if test="sampletype != null">
         #{sampletype,jdbcType=VARCHAR},
@@ -139,6 +162,9 @@
       <if test="location != null">
         location = #{location,jdbcType=INTEGER},
       </if>
+      <if test="corporation != null">
+        corporation = #{corporation,jdbcType=INTEGER},
+      </if>
       <if test="sampletype != null">
         sampleType = #{sampletype,jdbcType=VARCHAR},
       </if>
@@ -162,6 +188,7 @@
     set boxUID = #{boxuid,jdbcType=VARCHAR},
       tubeID = #{tubeid,jdbcType=VARCHAR},
       location = #{location,jdbcType=INTEGER},
+      corporation = #{corporation,jdbcType=VARCHAR},
       sampleType = #{sampletype,jdbcType=VARCHAR},
       sampleTemperature = #{sampletemperature,jdbcType=VARCHAR},
       personName = #{personname,jdbcType=VARCHAR},

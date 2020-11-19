@@ -6,13 +6,14 @@
     <result column="boxID" jdbcType="VARCHAR" property="boxid" />
     <result column="deviceUID" jdbcType="VARCHAR" property="deviceuid" />
     <result column="location" jdbcType="VARCHAR" property="location" />
+    <result column="corporation" jdbcType="VARCHAR" property="corporation" />
     <result column="capacity" jdbcType="INTEGER" property="capacity" />
     <result column="occupied" jdbcType="INTEGER" property="occupied" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    boxUID, deviceUID, location, capacity, occupied, create_time, update_time, boxID
+    boxUID, deviceUID, location, capacity, corporation, occupied, create_time, update_time, boxID
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -21,7 +22,7 @@
     where boxUID = #{boxuid,jdbcType=VARCHAR}
   </select>
     <select id="selectTubesByBoxUID" resultType="com.eleverse.eleverse.pojo.Tubes">
-      select tubeUID, boxUID, tubeID, location, sampleType, sampleTemperature, personName, create_time, update_time
+      select tubeUID, boxUID, tubeID, location, corporation, sampleType, sampleTemperature, personName, create_time, update_time
       from eleverse_tubes
       where boxUID = #{boxuid,jdbcType=VARCHAR}
     </select>
@@ -29,6 +30,13 @@
     select count(*)
     from eleverse_boxes
     where boxUID = #{boxuid,jdbcType=VARCHAR}
+    and  corporation = #{corporation,jdbcType=VARCHAR}
+  </select>
+  <select id="selectCountByBoxID" resultType="java.lang.Integer">
+    select count(*)
+    from eleverse_boxes
+    where boxID = #{boxid,jdbcType=VARCHAR}
+    and  corporation = #{corporation,jdbcType=VARCHAR}
   </select>
   <select id="selectCapacity" resultType="java.lang.Integer">
     select IFNULL(capacity,0)- IFNULL(occupied,0)
@@ -66,10 +74,10 @@
     where boxUID = #{boxuid,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.eleverse.eleverse.pojo.Boxes">
-    insert into eleverse_boxes (boxUID,boxID, deviceUID, location,
+    insert into eleverse_boxes (boxUID,boxID, deviceUID, location, corporation
       capacity, occupied, create_time, update_time
       )
-    values (#{boxuid,jdbcType=VARCHAR}, #{boxid,jdbcType=VARCHAR},#{deviceuid,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR},
+    values (#{boxuid,jdbcType=VARCHAR}, #{boxid,jdbcType=VARCHAR},#{deviceuid,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR},#{corporation,jdbcType=VARCHAR},
       #{capacity,jdbcType=INTEGER},#{occupied,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -87,6 +95,9 @@
       </if>
       <if test="location != null">
         location,
+      </if>
+      <if test="corporation != null">
+        corporation,
       </if>
       <if test="capacity != null">
         capacity,
@@ -114,6 +125,9 @@
       <if test="location != null">
         #{location,jdbcType=VARCHAR},
       </if>
+      <if test="corporation != null">
+        #{corporation,jdbcType=VARCHAR},
+      </if>
       <if test="capacity != null">
         #{capacity,jdbcType=INTEGER},
       </if>
@@ -137,6 +151,9 @@
       <if test="location != null">
         location = #{location,jdbcType=VARCHAR},
       </if>
+      <if test="corporation != null">
+        corporation = #{corporation,jdbcType=VARCHAR},
+      </if>
       <if test="capacity != null">
         capacity = #{capacity,jdbcType=INTEGER},
       </if>
@@ -156,6 +173,7 @@
     update eleverse_boxes
     set deviceUID = #{deviceuid,jdbcType=VARCHAR},
       location = #{location,jdbcType=VARCHAR},
+      corporation = #{corporation,jdbcType=VARCHAR},
       capacity = #{capacity,jdbcType=INTEGER},
       occupied = #{occupied,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},

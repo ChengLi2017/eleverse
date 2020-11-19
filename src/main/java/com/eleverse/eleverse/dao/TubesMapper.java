@@ -26,4 +26,8 @@ public interface TubesMapper {
     int countUpdateBoxes(String boxuid);
 
     void countUpdateBoxesDelete(String boxuid);
+
+    int selectCountByTubeUID(Tubes tube);
+
+    int selectCountByTubeID(Tubes tube);
 }

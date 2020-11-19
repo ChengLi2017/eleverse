@@ -29,6 +29,11 @@ public enum ResponseEnum {
 
 	USERNAME_NOTEXIST(10, "用户不存在"),
 
+	NONDEVICEUID(11, "设备UID不存在"),
+
+	NONBOXUID(11, "盒UID不存在"),
+
+	ID_ERROR(12,"ID重复"),
 
 
 	;

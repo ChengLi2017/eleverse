@@ -16,6 +16,8 @@ public class Tubes {
 
     private String sampletype;
 
+    private String corporation;
+
     private String sampletemperature;
 
     private String personname;

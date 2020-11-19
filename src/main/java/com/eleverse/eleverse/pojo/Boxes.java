@@ -15,6 +15,8 @@ public class Boxes {
 
     private String location;
 
+    private String corporation;
+
     private Integer capacity;
 
     private Integer occupied;
