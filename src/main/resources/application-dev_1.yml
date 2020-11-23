@@ -1,3 +1,11 @@
+spring:
+  messages:
+    besename: i18n/Messages
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 111111
+    url: jdbc:mysql://192.168.110.4:3306/eleverse?characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
@@ -12,11 +20,3 @@ server:
   servlet:
     session:
       timeout: 120
-spring:
-  messages:
-    basename: i18n/Messages
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: 111111
-    url: jdbc:mysql://192.168.110.4:3306/eleverse?characterEncoding=utf-8&useSSL=false&serverTimezone=UTC

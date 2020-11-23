@@ -3,7 +3,6 @@ package com.eleverse.eleverse.dao;
 import com.eleverse.eleverse.pojo.Boxes;
 import com.eleverse.eleverse.pojo.Tubes;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
 public interface BoxesMapper {
